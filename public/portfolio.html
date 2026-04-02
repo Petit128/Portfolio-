@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio - Hasinjo</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+  body {
+    animation: fadeIn 0.8s ease forwards;
+    overflow-y: auto; /* ← scroll activé */
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+
+/* VIDEO FULLSCREEN */
+.video-bg{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-2;
+}
+
+/* OVERLAY */
+.overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    transition:0.5s;
+    z-index:-1;
+}
+
+/* CONTENT */
+.container{
+    height:100vh;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:5%;
+    color:white;
+    transition:0.5s; /* 🔥 smooth color change */
+}
+
+/* LEFT */
+.left{
+    max-width:500px;
+}
+
+.left h1{
+    font-size:60px;
+    letter-spacing:4px;
+}
+
+.left p{
+    margin-top:20px;
+    font-size:18px;
+    opacity:0.9;
+    line-height:1.6;
+}
+
+/* RIGHT PROFILE */
+.profile{
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    background:url("circle_24x24.png") center/cover no-repeat;
+    border:5px solid white;
+    box-shadow:0 0 40px rgba(0,0,0,0.7);
+}
+
+/* BUTTON */
+.toggle{
+    position:absolute;
+    top:20px;
+    right:20px;
+    padding:10px 20px;
+    border:none;
+    background:white;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+/* DAY MODE: white contour for dark text (uses text-stroke where available and text-shadow fallback) */
+.container.day-outline .left h1,
+.container.day-outline .left p{
+    -webkit-text-stroke: 0.5px white; /* Safari/Chrome */
+    text-stroke: 2px white; /* non-standard */
+    /* fallback outline using multiple shadows for broader browser support */
+    text-shadow:
+        0 0 1px white,
+        0 0 2px white,
+        0 0 3px white;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+    .container{
+        flex-direction:column;
+        text-align:center;
+        justify-content:center;
+    }
+
+    .left h1{
+        font-size:40px;
+    }
+
+    .profile{
+        width:150px;
+        height:150px;
+        margin-top:30px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<video id="video" class="video-bg" autoplay muted playsinline>
+    <source src="/Minecraft_timelapse.mp4"type="video/mp4">
+</video>
+
+<div class="overlay" id="overlay"></div>
+
+<button class="toggle" onclick="toggleMode()">Day / Night</button>
+
+<div class="container">
+
+    <div class="left">
+        <h1>HASINJO</h1>
+        <p>
+            Passionate developer creating modern web experiences.  
+            I design clean, interactive, and powerful digital solutions.
+        </p>
+    </div>
+
+    <div class="right">
+        <div class="profile"><img src="" alt=""></div>
+    </div>
+
+</div>
+
+<script>
+const video = document.getElementById("video");
+const overlay = document.getElementById("overlay");
+const container = document.querySelector(".container"); // 🔥 ajouté
+
+let isNight = true;
+let isAnimating = false;
+
+/* START EN NUIT */
+video.addEventListener("loadedmetadata", () => {
+    video.currentTime = 2;
+    video.pause();
+
+    // Nuit plus lumineuse
+    overlay.style.background = "rgba(0,0,0,-100)";
+    container.style.color = "white"; // 🔥 texte blanc
+    // ensure day-outline removed on initial load
+    container.classList.remove('day-outline');
+});
+
+/* BOUTON */
+function toggleMode(){
+    if(isAnimating) return;
+
+    if(isNight){
+        goToDay();
+    }else{
+        goToNight();
+    }
+}
+
+/* NUIT ➜ JOUR (TIMELAPSE NORMAL) */
+function goToDay(){
+    isAnimating = true;
+
+    video.currentTime = 2;
+    video.playbackRate = 3;
+    video.play();
+
+    let interval = setInterval(() => {
+
+        if(video.currentTime >= 8){
+            clearInterval(interval);
+
+            video.pause();
+            video.currentTime = 9;
+            video.playbackRate = 1;
+
+            // Jour
+            overlay.style.background = "rgba(255,255,255,0.1)";
+            container.style.color = "black"; // 🔥 texte noir
+            // add white contour to dark text for better contrast
+            container.classList.add('day-outline');
+
+            isNight = false;
+            isAnimating = false;
+        }
+
+    }, 50);
+}
+
+/* JOUR ➜ NUIT (TIMELAPSE INVERSE) */
+function goToNight(){
+    isAnimating = true;
+
+    video.currentTime = 8;
+    video.pause();
+
+    let reverse = setInterval(() => {
+
+        video.currentTime -= 0.1;
+
+        if(video.currentTime <= 2){
+            clearInterval(reverse);
+
+            video.pause();
+            video.currentTime = 1;
+
+            // Nuit plus lumineuse
+            overlay.style.background = "rgba(0,0,0,0.25)";
+            container.style.color = "white"; // 🔥 texte blanc
+            // remove day contour when switching back to night
+            container.classList.remove('day-outline');
+
+            isNight = true;
+            isAnimating = false;
+        }
+
+    }, 30);
+}
+</script>
+
+</body>
+</html>
