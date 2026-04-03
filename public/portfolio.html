@@ -2,253 +2,923 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio - Hasinjo</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Hasinjo · Scroll Realm Portfolio | Mobile Ready</title>
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
 
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Minecraft', monospace;
+    position: fixed;
+    touch-action: pan-x pan-y; /* allow touch but we control swipe */
+  }
 
   body {
-    animation: fadeIn 0.8s ease forwards;
-    overflow-y: auto; /* ← scroll activé */
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    height: 100%;
   }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  body::-webkit-scrollbar {
+    display: none;
   }
 
+  /* PAGES */
+  .page {
+    display: none;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
 
-/* VIDEO FULLSCREEN */
-.video-bg{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    z-index:-2;
-}
+  .page.active {
+    display: flex;
+  }
 
-/* OVERLAY */
-.overlay{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.5);
-    transition:0.5s;
-    z-index:-1;
-}
+  /* ---------- PAGE 1 : HOME (optimized for mobile) ---------- */
+  #page1 {
+    background: #000;
+  }
 
-/* CONTENT */
-.container{
-    height:100vh;
-    width:100%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:5%;
-    color:white;
-    transition:0.5s; /* 🔥 smooth color change */
-}
+  .video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
 
-/* LEFT */
-.left{
-    max-width:500px;
-}
+  .overlay-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: -1;
+  }
 
-.left h1{
-    font-size:60px;
-    letter-spacing:4px;
-}
+  .hero {
+    min-height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8% 5%;
+    color: white;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
 
-.left p{
-    margin-top:20px;
-    font-size:18px;
-    opacity:0.9;
-    line-height:1.6;
-}
+  .about-box {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.65);
+    border: 2px solid rgba(255, 220, 100, 0.7);
+    border-radius: 32px;
+    padding: 24px 22px;
+    backdrop-filter: blur(10px);
+  }
 
-/* RIGHT PROFILE */
-.profile{
-    width:220px;
-    height:220px;
-    border-radius:50%;
-    background:url("circle_24x24.png") center/cover no-repeat;
-    border:5px solid white;
-    box-shadow:0 0 40px rgba(0,0,0,0.7);
-}
+  .about-box h1 {
+    font-size: clamp(28px, 8vw, 58px);
+    letter-spacing: 3px;
+    color: #ffdd57;
+    text-shadow: 0 0 12px #ffaa33;
+    margin-bottom: 14px;
+  }
 
-/* BUTTON */
-.toggle{
-    position:absolute;
-    top:20px;
-    right:20px;
-    padding:10px 20px;
-    border:none;
-    background:white;
-    color:black;
-    font-weight:bold;
-    cursor:pointer;
-    border-radius:6px;
-}
+  .about-box p {
+    font-size: clamp(13px, 4vw, 17px);
+    line-height: 1.5;
+    color: #f5f5f5;
+  }
 
-/* DAY MODE: white contour for dark text (uses text-stroke where available and text-shadow fallback) */
-.container.day-outline .left h1,
-.container.day-outline .left p{
-    -webkit-text-stroke: 0.5px white; /* Safari/Chrome */
-    text-stroke: 2px white; /* non-standard */
-    /* fallback outline using multiple shadows for broader browser support */
-    text-shadow:
-        0 0 1px white,
-        0 0 2px white,
-        0 0 3px white;
-}
+  .profile-hex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-    .container{
-        flex-direction:column;
-        text-align:center;
-        justify-content:center;
+  .hex-wrapper {
+    width: clamp(130px, 28vw, 200px);
+    height: clamp(130px, 28vw, 200px);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: #ffdd57;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 28px #ffaa33;
+  }
+
+  .hex-inner {
+    width: 94%;
+    height: 94%;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: #2a2a2a;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .family-section {
+    padding: 4% 5%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    color: white;
+  }
+
+  .family-sprite {
+    width: clamp(70px, 15vw, 110px);
+    cursor: pointer;
+    transition: transform 0.2s;
+    filter: drop-shadow(0 0 12px #ff8844);
+  }
+
+  .family-sprite:active {
+    transform: scale(0.96);
+  }
+
+  .family-text h2 {
+    color: #ffdd57;
+    font-size: clamp(18px, 5vw, 26px);
+    margin-bottom: 8px;
+  }
+
+  .family-photos {
+    display: none;
+    margin-top: 18px;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .family-photos.open {
+    display: flex;
+  }
+
+  .family-photos img {
+    width: clamp(80px, 25vw, 120px);
+    border-radius: 16px;
+    border: 2px solid #ffdd57;
+    object-fit: cover;
+    aspect-ratio: 1;
+  }
+
+  .bottom-bar-static {
+    padding: 5% 5% 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .daynight-btn {
+    background: none;
+    border: none;
+    width: 52px;
+    height: 52px;
+    cursor: pointer;
+    position: relative;
+    filter: drop-shadow(0 0 6px #fff6);
+  }
+
+  .daynight-btn img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 0.2s;
+  }
+
+  .daynight-btn img.hidden {
+    opacity: 0;
+  }
+
+  .gif-continue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    padding: 8px 12px;
+    border-radius: 60px;
+  }
+
+  .gif-continue:active {
+    transform: scale(0.96);
+  }
+
+  .enter-gif {
+    width: clamp(80px, 20vw, 120px);
+    filter: drop-shadow(0 0 16px #aa66ff);
+    animation: gentleFloat 2.2s ease-in-out infinite;
+  }
+
+  @keyframes gentleFloat {
+    0%,100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .enter-label {
+    color: #ffdd99;
+    font-size: 12px;
+    background: rgba(0,0,0,0.6);
+    padding: 5px 14px;
+    border-radius: 40px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  /* ---------- PAGE 2 : NETHER (mobile responsive grid) ---------- */
+  #page2 {
+    background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.9)), url('/nether_4k_5k_hd_minecraft-t2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: scroll;
+  }
+
+  .page2-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 8% 5%;
+  }
+
+  .nether-title {
+    font-size: clamp(24px, 7vw, 48px);
+    color: #ff7733;
+    text-shadow: 0 0 18px #ff4400;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .nether-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .nether-card {
+    background: rgba(40, 15, 0, 0.92);
+    border: 1px solid #ff8844aa;
+    border-radius: 28px;
+    padding: 20px 18px;
+    backdrop-filter: blur(4px);
+  }
+
+  .nether-card h3 {
+    color: #ffaa66;
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+  }
+
+  .year {
+    font-size: 0.75rem;
+    color: #ff8855aa;
+    margin-bottom: 12px;
+  }
+
+  .skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .skill-tag {
+    background: #ff773322;
+    border: 1px solid #ffaa66aa;
+    border-radius: 40px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: #ffd8b0;
+  }
+
+  .page-nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 45px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .nav-btn {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #ff8844;
+    color: #ffaa66;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 60px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: 0.2s;
+    flex: 1;
+    text-align: center;
+    min-width: 140px;
+  }
+
+  .nav-btn:active {
+    background: #ff8844cc;
+    transform: scale(0.97);
+  }
+
+  /* ---------- PAGE 3 : END (CHEST) ---------- */
+  #page3 {
+    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.85)), url('/minecraft-jouney-ends-fwd0y2twts0i6e1m.webp');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .chest-static-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    padding: 10% 5%;
+  }
+
+  .chest-title {
+    color: #ffdd99;
+    font-size: clamp(24px, 7vw, 44px);
+    text-shadow: 0 0 18px #ffaa33;
+  }
+
+  .chest-click-hint {
+    color: #ffcc88aa;
+    font-size: 13px;
+    animation: pulseHint 1.8s infinite;
+  }
+
+  @keyframes pulseHint {
+    0%,100% { opacity: 0.6; }
+    50% { opacity: 1; text-shadow: 0 0 6px #ffaa55; }
+  }
+
+  #static-chest-canvas {
+    cursor: pointer;
+    filter: drop-shadow(0 0 25px #ffaa3377);
+    transition: transform 0.2s;
+    background: transparent;
+    width: 280px;
+    max-width: 80vw;
+    height: auto;
+    touch-action: manipulation;
+  }
+
+  #static-chest-canvas:active {
+    transform: scale(0.98);
+  }
+
+  /* MODAL */
+  #project-card-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(16px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    touch-action: auto;
+    overflow-y: auto;
+  }
+
+  #project-card-modal.open {
+    display: flex;
+  }
+
+  .project-details-card {
+    background: #0f071dde;
+    border: 2px solid #ffcc88;
+    border-radius: 40px;
+    padding: 24px 20px;
+    max-width: 550px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 0 55px #ffaa3355;
+    color: #eee;
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 36px;
+    cursor: pointer;
+    color: #ffcc77;
+    padding: 6px;
+    line-height: 1;
+  }
+
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  .project-link-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(30, 20, 50, 0.8);
+    border-radius: 28px;
+    padding: 14px 18px;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #ffcc8866;
+    transition: 0.2s;
+  }
+
+  .project-link-card:active {
+    transform: scale(0.98);
+    background: rgba(80, 50, 120, 0.9);
+  }
+
+  .project-img {
+    width: 55px;
+    height: 55px;
+    border-radius: 20px;
+    background: #2a1e3a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+  }
+
+  .project-info h3 {
+    color: #ffdd99;
+    font-size: 1.1rem;
+  }
+
+  .project-info p {
+    color: #bbaaee;
+    font-size: 0.75rem;
+  }
+
+  /* PAGE 4 : FARLANDS */
+  #page4 {
+    background: linear-gradient(135deg, #02000a 0%, #1f0040 100%);
+    align-items: center;
+    justify-content: center;
+    padding: 12% 5%;
+    position: relative;
+  }
+
+  .farlands-title {
+    font-size: clamp(28px, 8vw, 55px);
+    color: #c99eff;
+    text-shadow: 0 0 22px #aa55ff;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .farlands-sub {
+    color: #b07eff;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .links-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .link-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: 0.2s;
+    width: 80px;
+  }
+
+  .link-block:active {
+    transform: translateY(-4px);
+  }
+
+  .link-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(160, 80, 255, 0.25);
+    border: 2px solid #aa66ffaa;
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+  }
+
+  .link-label {
+    font-size: 11px;
+    color: #cc99ff;
+  }
+
+  .stars-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #fef;
+    border-radius: 50%;
+    animation: twink 2s infinite alternate;
+  }
+
+  @keyframes twink {
+    0% { opacity: 0.2; }
+    100% { opacity: 1; }
+  }
+
+  @media (max-width: 650px) {
+    .hero {
+      flex-direction: column;
+      text-align: center;
+      padding: 8% 5%;
     }
-
-    .left h1{
-        font-size:40px;
+    .family-section {
+      flex-direction: column;
+      text-align: center;
     }
-
-    .profile{
-        width:150px;
-        height:150px;
-        margin-top:30px;
+    .bottom-bar-static {
+      justify-content: center;
     }
-}
+    .page-nav-buttons {
+      flex-direction: column;
+    }
+    .nav-btn {
+      width: 100%;
+    }
+    .project-link-card {
+      flex-direction: column;
+      text-align: center;
+    }
+    .enter-label {
+      white-space: normal;
+      font-size: 10px;
+    }
+  }
 </style>
 </head>
-
 <body>
 
-<video id="video" class="video-bg" autoplay muted playsinline>
-    <source src="/Minecraft_timelapse.mp4"type="video/mp4">
+<video id="bgVideo" class="video-bg" autoplay muted playsinline loop preload="auto">
+  <source src="/Minecraft_timelapse.mp4" type="video/mp4">
 </video>
+<div class="overlay-bg" id="globalOverlay"></div>
 
-<div class="overlay" id="overlay"></div>
-
-<button class="toggle" onclick="toggleMode()">Day / Night</button>
-
-<div class="container">
-
-    <div class="left">
-        <h1>HASINJO</h1>
-        <p>
-            Passionate developer creating modern web experiences.  
-            I design clean, interactive, and powerful digital solutions.
-        </p>
+<!-- PAGE 1 -->
+<section class="page active" id="page1">
+  <div class="hero">
+    <div class="about-box">
+      <h1>HASINJO</h1>
+      <p>⚡ Developer · Cybersecurity · Web Dev · Network Admin<br>Based in Madagascar 🇲🇬<br><br>❝ crafting secure & interactive realms ❞</p>
     </div>
-
-    <div class="right">
-        <div class="profile"><img src="" alt=""></div>
+    <div class="profile-hex">
+      <div class="hex-wrapper"><div class="hex-inner" style="background-image:url('/profile.png')"></div></div>
     </div>
+  </div>
+  <div class="family-section">
+    <img src="/family-sprite.png" alt="family sprite" class="family-sprite" id="familyToggleSprite">
+    <div class="family-text">
+      <h2>👪 My Happy Family</h2>
+      <p>Tap the sprite to see my beloved family — my strongest support.</p>
+      <div class="family-photos" id="familyPhotosList">
+        <img src="/family1.jpg" alt="family 1">
+        <img src="/family2.jpg" alt="family 2">
+        <img src="/family3.jpg" alt="family 3">
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar-static">
+    <button class="daynight-btn" id="dayNightToggle" aria-label="Day/Night">
+      <img src="/day.png" alt="day" id="dayIcon">
+      <img src="/night.png" alt="night" id="nightIcon" class="hidden">
+    </button>
+    <div class="gif-continue" id="enterPage2Btn">
+      <img src="/bg_edited_gif_233ce16a-bfb7-4709-b44e-e969c1ff7111_GIFSolo_20260403_005309.gif" alt="enter portal" class="enter-gif">
+      <span class="enter-label">🔥 CLICk NETHER REALM 🔥</span>
+    </div>
+    <div style="width: 44px;"></div>
+  </div>
+</section>
 
-</div>
+<!-- PAGE 2 -->
+<section class="page" id="page2">
+  <div class="page2-container">
+    <h2 class="nether-title">🔥 NETHER REALM · JOURNEY</h2>
+    <div class="nether-grid">
+      <div class="nether-card"><h3>🎓 Baccalauréat</h3><div class="year">2024 – 2025</div><p>Lycée Saint Michel Itaosy</p></div>
+      <div class="nether-card"><h3>🏛️ Licence 1</h3><div class="year">2024 – 2025</div><p>ESMIA (Management & IT)</p></div>
+      <div class="nether-card"><h3>🏛️ Licence 2</h3><div class="year">2025 – 2026</div><p>ESMIA - Réseaux & Securité</p></div>
+      <div class="nether-card"><h3>🔐 Cybersecurity</h3><div class="year">Compétences</div><div class="skills-grid"><span class="skill-tag">Network Security</span><span class="skill-tag">Ethical Hacking</span><span class="skill-tag">Firewall</span><span class="skill-tag">CTF</span><span class="skill-tag">Linux</span></div></div>
+      <div class="nether-card"><h3>🌐 Web Dev</h3><div class="year">Compétences</div><div class="skills-grid"><span class="skill-tag">HTML/CSS</span><span class="skill-tag">JavaScript</span><span class="skill-tag">Three.js</span><span class="skill-tag">React</span></div></div>
+      <div class="nether-card"><h3>🖧 Admin Réseaux</h3><div class="year">Compétences</div><div class="skills-grid"><span class="skill-tag">TCP/IP</span><span class="skill-tag">Cisco</span><span class="skill-tag">VPN</span><span class="skill-tag">DNS/DHCP</span></div></div>
+      <div class="nether-card"><h3>🌍 Langues</h3><div class="year">Languages</div><div class="skills-grid"><span class="skill-tag">Malagasy 🇲🇬</span><span class="skill-tag">Français 🇫🇷</span><span class="skill-tag">English 🇬🇧</span></div></div>
+      <div class="nether-card"><h3>⚡ Abilities</h3><div class="year">Soft skills</div><div class="skills-grid"><span class="skill-tag">Problem Solving</span><span class="skill-tag">Coding</span><span class="skill-tag">Creative</span><span class="skill-tag">Team Work</span></div></div>
+    </div>
+    <div class="page-nav-buttons">
+      <button class="nav-btn" id="goToPage1From2">◀ BACK TO OVERWORLD</button>
+      <button class="nav-btn" id="goToPage3From2">ENTER THE END ▶</button>
+    </div>
+  </div>
+</section>
 
-<script>
-const video = document.getElementById("video");
-const overlay = document.getElementById("overlay");
-const container = document.querySelector(".container"); // 🔥 ajouté
+<!-- PAGE 3 -->
+<section class="page" id="page3">
+  <div class="chest-static-area">
+    <h2 class="chest-title">🎁 TREASURE CHEST</h2>
+    <p class="chest-click-hint">⬇️ TAP THE CHEST → OPEN PROJECTS ⬇️</p>
+    <canvas id="static-chest-canvas" width="320" height="270" style="width:280px; max-width:80vw; height:auto"></canvas>
+  </div>
+  <div id="project-card-modal">
+    <div class="project-details-card">
+      <button class="modal-close" id="closeModalBtn">✕</button>
+      <h2 style="text-align:center; color:#ffdd88;">📁 MY PROJECTS LIBRARY</h2>
+      <div class="projects-list">
+        <a href="#" target="_blank" class="project-link-card"><div class="project-img">🌐</div><div class="project-info"><h3>3D IMMERSIVE PORTFOLIO</h3><p>Three.js + cinematic Minecraft style</p></div></a>
+        <a href="#" target="_blank" class="project-link-card"><div class="project-img">🔐</div><div class="project-info"><h3>CTF CHALLENGE LAB</h3><p>Cybersecurity capture the flag platform</p></div></a>
+        <a href="#" target="_blank" class="project-link-card"><div class="project-img">🖧</div><div class="project-info"><h3>NETWORK SIMULATION</h3><p>Cisco Packet Tracer – enterprise topology</p></div></a>
+        <a href="#" target="_blank" class="project-link-card"><div class="project-img">🎮</div><div class="project-info"><h3>MINECRAFT UTILITIES</h3><p>Custom plugins & datapacks</p></div></a>
+        <a href="#" target="_blank" class="project-link-card"><div class="project-img">⚡</div><div class="project-info"><h3>WEB SECURITY TOOL</h3><p>Vulnerability scanner demo</p></div></a>
+      </div>
+    </div>
+  </div>
+</section>
 
-let isNight = true;
-let isAnimating = false;
+<!-- PAGE 4 -->
+<section class="page" id="page4">
+  <div class="stars-bg" id="starfield"></div>
+  <h2 class="farlands-title">✦ THE FARLANDS ✦</h2>
+  <p class="farlands-sub">Where the world ends — find me here</p>
+  <div class="links-grid">
+    <a href="https://github.com/" target="_blank" class="link-block"><div class="link-icon">🐙</div><span class="link-label">GITHUB</span></a>
+    <a href="https://linkedin.com/" target="_blank" class="link-block"><div class="link-icon">💼</div><span class="link-label">LINKEDIN</span></a>
+    <a href="mailto:hasinjo@email.com" class="link-block"><div class="link-icon">📧</div><span class="link-label">EMAIL</span></a>
+    <a href="https://twitter.com/" target="_blank" class="link-block"><div class="link-icon">🐦</div><span class="link-label">TWITTER</span></a>
+    <a href="#" class="link-block"><div class="link-icon">🎮</div><span class="link-label">DISCORD</span></a>
+    <a href="#" class="link-block"><div class="link-icon">📱</div><span class="link-label">WHATSAPP</span></a>
+  </div>
+</section>
 
-/* START EN NUIT */
-video.addEventListener("loadedmetadata", () => {
-    video.currentTime = 2;
-    video.pause();
-
-    // Nuit plus lumineuse
-    overlay.style.background = "rgba(0,0,0,-100)";
-    container.style.color = "white"; // 🔥 texte blanc
-    // ensure day-outline removed on initial load
-    container.classList.remove('day-outline');
-});
-
-/* BOUTON */
-function toggleMode(){
-    if(isAnimating) return;
-
-    if(isNight){
-        goToDay();
-    }else{
-        goToNight();
-    }
-}
-
-/* NUIT ➜ JOUR (TIMELAPSE NORMAL) */
-function goToDay(){
-    isAnimating = true;
-
-    video.currentTime = 2;
-    video.playbackRate = 3;
-    video.play();
-
-    let interval = setInterval(() => {
-
-        if(video.currentTime >= 8){
-            clearInterval(interval);
-
-            video.pause();
-            video.currentTime = 9;
-            video.playbackRate = 1;
-
-            // Jour
-            overlay.style.background = "rgba(255,255,255,0.1)";
-            container.style.color = "black"; // 🔥 texte noir
-            // add white contour to dark text for better contrast
-            container.classList.add('day-outline');
-
-            isNight = false;
-            isAnimating = false;
-        }
-
-    }, 50);
-}
-
-/* JOUR ➜ NUIT (TIMELAPSE INVERSE) */
-function goToNight(){
-    isAnimating = true;
-
-    video.currentTime = 8;
-    video.pause();
-
-    let reverse = setInterval(() => {
-
-        video.currentTime -= 0.1;
-
-        if(video.currentTime <= 2){
-            clearInterval(reverse);
-
-            video.pause();
-            video.currentTime = 1;
-
-            // Nuit plus lumineuse
-            overlay.style.background = "rgba(0,0,0,0.25)";
-            container.style.color = "white"; // 🔥 texte blanc
-            // remove day contour when switching back to night
-            container.classList.remove('day-outline');
-
-            isNight = true;
-            isAnimating = false;
-        }
-
-    }, 30);
-}
+<script type="importmap">
+  { "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }
 </script>
 
+<script type="module">
+  import * as THREE from 'three';
+  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+  // ----- PAGE SWITCHING (robust for mobile) -----
+  const pages = {
+    page1: document.getElementById('page1'),
+    page2: document.getElementById('page2'),
+    page3: document.getElementById('page3'),
+    page4: document.getElementById('page4')
+  };
+  
+  function showPage(pageId) {
+    Object.keys(pages).forEach(id => pages[id].classList.remove('active'));
+    pages[pageId].classList.add('active');
+    const video = document.getElementById('bgVideo');
+    const overlay = document.getElementById('globalOverlay');
+    if (pageId === 'page1') {
+      video.style.display = 'block';
+      overlay.style.display = 'block';
+      // ensure video continues
+      if (video.paused) video.play().catch(e=>{});
+    } else {
+      video.style.display = 'none';
+      overlay.style.display = 'none';
+    }
+    // scroll to top on page change for better UX
+    pages[pageId].scrollTop = 0;
+  }
+  
+  // Button events (mobile friendly)
+  document.getElementById('enterPage2Btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    showPage('page2');
+  });
+  document.getElementById('goToPage1From2').addEventListener('click', () => showPage('page1'));
+  document.getElementById('goToPage3From2').addEventListener('click', () => showPage('page3'));
+  
+  // ----- 2-FINGER / TOUCHPAD + SWIPE FOR MOBILE (touch events) -----
+  let touchStartY = 0;
+  let touchEndY = 0;
+  let modalOpenFlag = false;
+  const modalElem = document.getElementById('project-card-modal');
+  const modalObserver = new MutationObserver(() => {
+    modalOpenFlag = modalElem.classList.contains('open');
+  });
+  modalObserver.observe(modalElem, { attributes: true, attributeFilter: ['class'] });
+  
+  // Wheel for trackpad/magic mouse (desktop + some laptops)
+  let lastWheel = 0;
+  let wheelBlock = false;
+  window.addEventListener('wheel', (e) => {
+    if (modalOpenFlag) return;
+    const active = document.querySelector('.page.active');
+    if (!active) return;
+    const delta = e.deltaY;
+    if (Math.abs(delta) < 12) return;
+    const now = Date.now();
+    if (wheelBlock || (now - lastWheel) < 350) return;
+    
+    if (active.id === 'page1' || active.id === 'page2') {
+      e.preventDefault();
+      return;
+    }
+    if (active.id === 'page3') {
+      e.preventDefault();
+      if (delta > 0) { // swipe down -> page4
+        wheelBlock = true;
+        lastWheel = now;
+        showPage('page4');
+        setTimeout(() => { wheelBlock = false; }, 400);
+      } else if (delta < 0) { // swipe up -> page2
+        wheelBlock = true;
+        lastWheel = now;
+        showPage('page2');
+        setTimeout(() => { wheelBlock = false; }, 400);
+      }
+      return;
+    }
+    if (active.id === 'page4') {
+      e.preventDefault();
+      if (delta < 0) { // swipe up -> back to page3
+        wheelBlock = true;
+        lastWheel = now;
+        showPage('page3');
+        setTimeout(() => { wheelBlock = false; }, 400);
+      }
+      return;
+    }
+  }, { passive: false });
+  
+  // TOUCH EVENTS for mobile (swipe up/down on page3/page4)
+  document.body.addEventListener('touchstart', (e) => {
+    if (modalOpenFlag) return;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  
+  document.body.addEventListener('touchend', (e) => {
+    if (modalOpenFlag) return;
+    const active = document.querySelector('.page.active');
+    if (!active) return;
+    const diff = touchStartY - touchEndY;
+    const absDiff = Math.abs(diff);
+    if (absDiff < 35) return;
+    
+    if (active.id === 'page3') {
+      if (diff > 0) { // swipe up -> page4
+        showPage('page4');
+      } else if (diff < 0) { // swipe down -> page2
+        showPage('page2');
+      }
+      e.preventDefault();
+    } 
+    else if (active.id === 'page4') {
+      if (diff < 0) { // swipe down (finger up? diff negative means scroll down direction -> go back to page3)
+        showPage('page3');
+      }
+      e.preventDefault();
+    }
+  });
+  
+  document.body.addEventListener('touchmove', (e) => {
+    if (modalOpenFlag) return;
+    touchEndY = e.touches[0].clientY;
+    const active = document.querySelector('.page.active');
+    if (active && (active.id === 'page3' || active.id === 'page4')) {
+      // prevent page bounce while swiping on edges
+      const delta = touchStartY - touchEndY;
+      if (Math.abs(delta) > 20) e.preventDefault();
+    }
+  }, { passive: false });
+  
+  // ----- DAY/NIGHT MODE -----
+  const videoEl = document.getElementById('bgVideo');
+  const overlayDiv = document.getElementById('globalOverlay');
+  let isNight = false;
+  let animating = false;
+  const dayIcon = document.getElementById('dayIcon');
+  const nightIcon = document.getElementById('nightIcon');
+  
+  videoEl.addEventListener('loadedmetadata', () => { videoEl.currentTime = 9; videoEl.pause(); overlayDiv.style.background = 'rgba(255,255,255,0.08)'; });
+  function toDay() { if(animating) return; animating=true; videoEl.currentTime=2; videoEl.playbackRate=2.8; videoEl.play(); const iv=setInterval(()=>{ if(videoEl.currentTime>=8.5){ clearInterval(iv); videoEl.pause(); videoEl.currentTime=9; videoEl.playbackRate=1; overlayDiv.style.background='rgba(255,255,255,0.08)'; dayIcon.classList.remove('hidden'); nightIcon.classList.add('hidden'); isNight=false; animating=false; } },30);}
+  function toNight() { if(animating) return; animating=true; videoEl.currentTime=8; videoEl.pause(); const iv=setInterval(()=>{ videoEl.currentTime-=0.1; if(videoEl.currentTime<=2.2){ clearInterval(iv); videoEl.pause(); videoEl.currentTime=1; overlayDiv.style.background='rgba(0,0,0,0.65)'; dayIcon.classList.add('hidden'); nightIcon.classList.remove('hidden'); isNight=true; animating=false; } },28);}
+  document.getElementById('dayNightToggle').addEventListener('click', () => { if(!isNight) toNight(); else toDay(); });
+  
+  // Family toggle (mobile)
+  document.getElementById('familyToggleSprite').addEventListener('click', () => {
+    document.getElementById('familyPhotosList').classList.toggle('open');
+  });
+  
+  // ----- THREE.JS CHEST -----
+  const chestCanvas = document.getElementById('static-chest-canvas');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(0, 0.9, 3.2);
+  camera.lookAt(0, 0.2, 0);
+  const renderer = new THREE.WebGLRenderer({ canvas: chestCanvas, antialias: true, alpha: true });
+  const setCanvasSize = () => {
+    const container = chestCanvas.parentElement;
+    let width = Math.min(window.innerWidth * 0.7, 320);
+    width = Math.max(240, width);
+    const aspect = 270/320;
+    chestCanvas.style.width = `${width}px`;
+    chestCanvas.style.height = `${width * aspect}px`;
+    renderer.setSize(width, width * aspect);
+    camera.aspect = width / (width * aspect);
+    camera.updateProjectionMatrix();
+  };
+  setCanvasSize();
+  window.addEventListener('resize', setCanvasSize);
+  renderer.setClearColor(0x000000, 0);
+  const ambient = new THREE.AmbientLight(0xffffff, 1.0);
+  scene.add(ambient);
+  const dLight = new THREE.DirectionalLight(0xffcc88, 1.5);
+  dLight.position.set(2, 3, 2);
+  scene.add(dLight);
+  const loader = new GLTFLoader();
+  loader.load('/models/chest.gltf', (gltf) => {
+    const chestGroup = gltf.scene;
+    scene.add(chestGroup);
+    chestGroup.scale.set(1.4,1.4,1.4);
+    chestGroup.position.set(0,-0.5,0);
+  }, undefined, (error) => console.warn("chest model not found, using fallback", error));
+  function animateChest() { requestAnimationFrame(animateChest); renderer.render(scene, camera); }
+  animateChest();
+  
+  // Modal open/close chest + prevent page swipe
+  const modalChest = document.getElementById('project-card-modal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  chestCanvas.addEventListener('click', (e) => { e.stopPropagation(); modalChest.classList.add('open'); });
+  closeModalBtn.addEventListener('click', () => { modalChest.classList.remove('open'); });
+  modalChest.addEventListener('click', (e) => { if(e.target === modalChest) modalChest.classList.remove('open'); });
+  
+  // Ensure modal content scrolls without triggering page navigation
+  const modalContent = document.querySelector('.project-details-card');
+  if(modalContent) modalContent.addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
+  const projList = document.querySelector('.projects-list');
+  if(projList) projList.addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
+  
+  // Stars for farlands
+  const starContainer = document.getElementById('starfield');
+  for (let i=0;i<150;i++) {
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDuration = 1 + Math.random() * 3 + 's';
+    star.style.animationDelay = Math.random() * 5 + 's';
+    star.style.opacity = 0.3 + Math.random() * 0.6;
+    starContainer.appendChild(star);
+  }
+  
+  // Autoplay video first tap
+  document.body.addEventListener('click', () => { if(videoEl.paused && pages.page1.classList.contains('active')) videoEl.play().catch(e=>{}); }, { once: true });
+  
+  console.log("Fully responsive + mobile navigation active: GIF works, chest touch works, 2-finger/touch swipe page3/4");
+</script>
 </body>
 </html>
