@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Hasinjo · Scroll Realm Portfolio | Mobile Ready</title>
+<title>Hasinjo · Scroll Realm Portfolio</title>
 <style>
   * {
     margin: 0;
@@ -16,96 +16,101 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #0a0a0a;
-    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Minecraft', monospace;
-    position: fixed;
-    touch-action: pan-x pan-y; /* allow touch but we control swipe */
   }
 
   body {
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    height: 100%;
-  }
-  body::-webkit-scrollbar {
-    display: none;
+    background: #0a0a0a;
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, monospace;
+    position: fixed;
+    top: 0;
+    left: 0;
+    touch-action: manipulation;
   }
 
-  /* PAGES */
+  /* ===== VIDEO BG ===== */
+  #bgVideo {
+    position: fixed;
+    top: 50%; left: 50%;
+    min-width: 100%; min-height: 100%;
+    width: auto; height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: -2;
+    background: #000;
+  }
+
+  #globalOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    transition: background 0.4s ease;
+    background: rgba(0,0,0,0.45);
+  }
+
+  /* ===== PAGES ===== */
   .page {
     display: none;
-    min-height: 100vh;
     width: 100%;
-    position: relative;
+    height: 100dvh;
+    position: absolute;
+    top: 0; left: 0;
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
+  .page::-webkit-scrollbar { display: none; }
+  .page.active { display: flex; }
 
-  .page.active {
-    display: flex;
-  }
-
-  /* ---------- PAGE 1 : HOME (optimized for mobile) ---------- */
+  /* ===== PAGE 1 ===== */
   #page1 {
-    background: #000;
-  }
-
-  .video-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -2;
-  }
-
-  .overlay-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: -1;
+    background: transparent;
+    /* Extra bottom padding so content doesn't hide under fixed buttons */
+    padding-bottom: 120px;
   }
 
   .hero {
-    min-height: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8% 5%;
+    padding: 10% 6% 5%;
     color: white;
-    gap: 30px;
+    gap: 24px;
     flex-wrap: wrap;
   }
 
   .about-box {
     flex: 1;
-    background: rgba(0, 0, 0, 0.65);
-    border: 2px solid rgba(255, 220, 100, 0.7);
+    min-width: 240px;
+    background: rgba(0,0,0,0.68);
+    border: 2px solid rgba(255,220,100,0.75);
     border-radius: 32px;
     padding: 24px 22px;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.4s;
   }
-
+  .about-box.day-mode {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(180,120,0,0.8);
+  }
   .about-box h1 {
     font-size: clamp(28px, 8vw, 58px);
     letter-spacing: 3px;
     color: #ffdd57;
-    text-shadow: 0 0 12px #ffaa33;
+    text-shadow: 0 0 14px #ffaa33;
     margin-bottom: 14px;
   }
-
   .about-box p {
-    font-size: clamp(13px, 4vw, 17px);
-    line-height: 1.5;
-    color: #f5f5f5;
+    font-size: clamp(13px, 3.5vw, 17px);
+    line-height: 1.65;
+    color: #f0f0f0;
   }
+  .about-box.day-mode p { color: #1a1a1a; text-shadow: 0 0 3px #fff; }
+  .about-box.day-mode h1 { color: #b86e00; text-shadow: 0 0 10px #ffaa00aa; }
 
   .profile-hex {
     display: flex;
@@ -114,197 +119,177 @@
     gap: 10px;
     flex-shrink: 0;
   }
-
   .hex-wrapper {
-    width: clamp(130px, 28vw, 200px);
-    height: clamp(130px, 28vw, 200px);
+    width: clamp(120px, 26vw, 190px);
+    height: clamp(120px, 26vw, 190px);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     background: #ffdd57;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 28px #ffaa33;
+    box-shadow: 0 0 30px #ffaa33;
   }
-
   .hex-inner {
-    width: 94%;
-    height: 94%;
+    width: 93%; height: 93%;
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    background: #2a2a2a;
-    background-size: cover;
-    background-position: center;
+    background: #2a2a2a center/cover no-repeat;
   }
 
+  /* Family */
   .family-section {
-    padding: 4% 5%;
+    padding: 4% 6%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 20px;
     flex-wrap: wrap;
     color: white;
   }
-
   .family-sprite {
-    width: clamp(70px, 15vw, 110px);
+    width: clamp(65px, 14vw, 105px);
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.18s;
     filter: drop-shadow(0 0 12px #ff8844);
+    touch-action: manipulation;
+    flex-shrink: 0;
   }
-
-  .family-sprite:active {
-    transform: scale(0.96);
-  }
-
+  .family-sprite:active { transform: scale(0.94); }
   .family-text h2 {
     color: #ffdd57;
-    font-size: clamp(18px, 5vw, 26px);
+    font-size: clamp(16px, 4.5vw, 24px);
     margin-bottom: 8px;
   }
-
+  .family-text p { font-size: clamp(12px, 3vw, 15px); color: #ddd; }
   .family-photos {
     display: none;
-    margin-top: 18px;
+    margin-top: 14px;
     gap: 12px;
     flex-wrap: wrap;
-    justify-content: center;
   }
-
-  .family-photos.open {
-    display: flex;
-  }
-
+  .family-photos.open { display: flex; }
   .family-photos img {
-    width: clamp(80px, 25vw, 120px);
+    width: clamp(75px, 22vw, 115px);
     border-radius: 16px;
     border: 2px solid #ffdd57;
     object-fit: cover;
     aspect-ratio: 1;
   }
 
-  .bottom-bar-static {
-    padding: 5% 5% 8%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .daynight-btn {
-    background: none;
-    border: none;
-    width: 52px;
-    height: 52px;
+  /* ===== FIXED BOTTOM BUTTONS (PAGE 1) ===== */
+  /* Day/Night — fixed bottom-left */
+  #dayNightToggle {
+    position: fixed;
+    bottom: env(safe-area-inset-bottom, 20px);
+    bottom: max(20px, env(safe-area-inset-bottom));
+    left: 20px;
+    z-index: 1000;
+    background: rgba(0,0,0,0.55);
+    border: 2px solid rgba(255,220,100,0.6);
+    border-radius: 50%;
+    width: 58px;
+    height: 58px;
     cursor: pointer;
-    position: relative;
-    filter: drop-shadow(0 0 6px #fff6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    touch-action: manipulation;
+    transition: border-color 0.3s, opacity 0.3s;
   }
-
-  .daynight-btn img {
-    width: 100%;
-    height: 100%;
+  #dayNightToggle:active { opacity: 0.75; }
+  #dayNightToggle img {
+    width: 34px;
+    height: 34px;
     position: absolute;
-    top: 0;
-    left: 0;
-    transition: opacity 0.2s;
+    transition: opacity 0.25s;
+    filter: drop-shadow(0 0 6px #fff8);
   }
+  #dayNightToggle img.hidden { opacity: 0; pointer-events: none; }
 
-  .daynight-btn img.hidden {
-    opacity: 0;
-  }
-
-  .gif-continue {
+  /* Portal GIF — fixed bottom-right */
+  #enterPage2Btn {
+    position: fixed;
+    bottom: max( env(safe-area-inset-bottom));
+    right: 20px;
+    z-index: 1000;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     cursor: pointer;
-    transition: transform 0.2s;
-    padding: 8px 12px;
-    border-radius: 60px;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+    /* NO float animation */
   }
-
-  .gif-continue:active {
-    transform: scale(0.96);
-  }
-
+  #enterPage2Btn:active { opacity: 0.8; }
   .enter-gif {
-    width: clamp(80px, 20vw, 120px);
+    width: clamp(65px, 16vw, 100px);
     filter: drop-shadow(0 0 16px #aa66ff);
-    animation: gentleFloat 2.2s ease-in-out infinite;
+    display: block;
+    /* Removed floating animation */
   }
-
-  @keyframes gentleFloat {
-    0%,100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
-  }
-
   .enter-label {
     color: #ffdd99;
-    font-size: 12px;
-    background: rgba(0,0,0,0.6);
-    padding: 5px 14px;
+    font-size: clamp(8px, 2.2vw, 11px);
+    background: rgba(0,0,0,0.72);
+    padding: 4px 12px;
     border-radius: 40px;
     font-weight: bold;
     white-space: nowrap;
+    text-align: center;
+    border: 1px solid rgba(255,180,80,0.4);
   }
 
-  /* ---------- PAGE 2 : NETHER (mobile responsive grid) ---------- */
+  /* Hide fixed buttons when not on page1 */
+  body:not(.page1-active) #dayNightToggle,
+  body:not(.page1-active) #enterPage2Btn {
+    display: none;
+  }
+
+  /* ===== PAGE 2 : NETHER ===== */
   #page2 {
-    background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.9)), url('/nether_4k_5k_hd_minecraft-t2.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: scroll;
+    background:
+      linear-gradient(rgba(0,0,0,0.82), rgba(0,0,0,0.88)),
+      url('/nether_4k_5k_hd_minecraft-t2.jpg') center/cover no-repeat;
   }
-
   .page2-container {
-    position: relative;
-    z-index: 2;
     width: 100%;
-    padding: 8% 5%;
+    padding: 8% 5% 5%;
   }
-
   .nether-title {
-    font-size: clamp(24px, 7vw, 48px);
+    font-size: clamp(22px, 6.5vw, 46px);
     color: #ff7733;
     text-shadow: 0 0 18px #ff4400;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
   }
-
   .nether-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
   }
-
   .nether-card {
-    background: rgba(40, 15, 0, 0.92);
+    background: rgba(40,15,0,0.92);
     border: 1px solid #ff8844aa;
-    border-radius: 28px;
-    padding: 20px 18px;
+    border-radius: 26px;
+    padding: 18px 16px;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
-
   .nether-card h3 {
     color: #ffaa66;
-    font-size: 1.3rem;
+    font-size: clamp(1rem, 3vw, 1.3rem);
     margin-bottom: 4px;
   }
-
   .year {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: #ff8855aa;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    display: block;
   }
-
-  .skills-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-  }
-
+  .nether-card p { color: #ffd8b0; font-size: 0.85rem; }
+  .skills-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
   .skill-tag {
     background: #ff773322;
     border: 1px solid #ffaa66aa;
@@ -317,343 +302,468 @@
   .page-nav-buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 45px;
-    gap: 16px;
+    margin-top: 40px;
+    gap: 14px;
     flex-wrap: wrap;
+    padding-bottom: 8%;
   }
 
   .nav-btn {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0,0,0,0.82);
     border: 2px solid #ff8844;
     color: #ffaa66;
-    font-size: 0.9rem;
+    font-size: clamp(0.78rem, 2.5vw, 0.92rem);
     font-weight: bold;
-    padding: 10px 20px;
+    padding: 14px 22px;
     border-radius: 60px;
     cursor: pointer;
     backdrop-filter: blur(8px);
-    transition: 0.2s;
+    -webkit-backdrop-filter: blur(8px);
+    transition: 0.18s;
     flex: 1;
     text-align: center;
-    min-width: 140px;
+    min-width: 130px;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
   }
-
   .nav-btn:active {
     background: #ff8844cc;
     transform: scale(0.97);
   }
 
-  /* ---------- PAGE 3 : END (CHEST) ---------- */
+  /* ===== PAGE 3 : CHEST ===== */
   #page3 {
-    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.85)), url('/minecraft-jouney-ends-fwd0y2twts0i6e1m.webp');
-    background-size: cover;
-    background-position: center;
+    background:
+      linear-gradient(rgba(0,0,0,0.78), rgba(0,0,0,0.85)),
+      url('/minecraft-jouney-ends-fwd0y2twts0i6e1m.webp') center/cover no-repeat;
   }
 
   .chest-static-area {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 18px;
     text-align: center;
-    padding: 10% 5%;
+    padding: 10% 5% 4%;
+    width: 100%;
+    flex: 1;
+    justify-content: center;
   }
 
   .chest-title {
     color: #ffdd99;
-    font-size: clamp(24px, 7vw, 44px);
+    font-size: clamp(22px, 6.5vw, 42px);
     text-shadow: 0 0 18px #ffaa33;
   }
 
   .chest-click-hint {
-    color: #ffcc88aa;
-    font-size: 13px;
+    color: #ffcc88cc;
+    font-size: clamp(11px, 3vw, 14px);
     animation: pulseHint 1.8s infinite;
   }
-
   @keyframes pulseHint {
     0%,100% { opacity: 0.6; }
-    50% { opacity: 1; text-shadow: 0 0 6px #ffaa55; }
+    50% { opacity: 1; text-shadow: 0 0 8px #ffaa55; }
   }
 
-  #static-chest-canvas {
+  /* ===== CHEST BUTTON — remplace le canvas Three.js ===== */
+  #chest-tap-btn {
+    position: relative;
+    width: min(260px, 75vw);
+    height: min(220px, 62vw);
     cursor: pointer;
-    filter: drop-shadow(0 0 25px #ffaa3377);
-    transition: transform 0.2s;
-    background: transparent;
-    width: 280px;
-    max-width: 80vw;
-    height: auto;
     touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+    border: none;
+    background: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  #static-chest-canvas:active {
-    transform: scale(0.98);
+  .chest-svg-wrap {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 28px #ffaa3380);
+    transition: transform 0.15s, filter 0.15s;
+    /* No rotation animation */
   }
 
-  /* MODAL */
+  #chest-tap-btn:active .chest-svg-wrap {
+    transform: scale(0.95);
+    filter: drop-shadow(0 0 44px #ffaa33cc);
+  }
+
+  /* Pulse glow ring */
+  #chest-tap-btn::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 28px;
+    border: 2px solid #ffaa3355;
+    animation: chestGlow 2s infinite;
+    pointer-events: none;
+  }
+  @keyframes chestGlow {
+    0%,100% { border-color: #ffaa3333; box-shadow: 0 0 0 0 #ffaa3300; }
+    50% { border-color: #ffaa3388; box-shadow: 0 0 18px 4px #ffaa3344; }
+  }
+
+  .page3-nav-buttons {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 4% 5% 8%;
+    width: 100%;
+  }
+
+  /* ===== MODAL ===== */
   #project-card-modal {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.92);
-    backdrop-filter: blur(16px);
-    z-index: 2000;
-    align-items: center;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    z-index: 3000;
+    align-items: flex-start;
     justify-content: center;
-    padding: 16px;
-    touch-action: auto;
+    padding: 20px 14px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
-
-  #project-card-modal.open {
-    display: flex;
-  }
+  #project-card-modal.open { display: flex; }
 
   .project-details-card {
-    background: #0f071dde;
+    background: #0f071dee;
     border: 2px solid #ffcc88;
-    border-radius: 40px;
-    padding: 24px 20px;
-    max-width: 550px;
+    border-radius: 36px;
+    padding: 28px 20px 24px;
+    max-width: 520px;
     width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-    box-shadow: 0 0 55px #ffaa3355;
+    margin: auto;
+    box-shadow: 0 0 60px #ffaa3344;
     color: #eee;
     position: relative;
   }
-
   .modal-close {
     position: absolute;
-    top: 14px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 36px;
+    top: 12px; right: 18px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #ffcc7755;
+    border-radius: 50%;
+    font-size: 28px;
     cursor: pointer;
     color: #ffcc77;
-    padding: 6px;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    touch-action: manipulation;
+    z-index: 10;
     line-height: 1;
   }
+  .modal-close:active { background: rgba(255,180,80,0.3); }
 
   .projects-list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    margin-top: 28px;
+    gap: 14px;
+    margin-top: 22px;
   }
-
   .project-link-card {
     display: flex;
     align-items: center;
-    gap: 16px;
-    background: rgba(30, 20, 50, 0.8);
-    border-radius: 28px;
-    padding: 14px 18px;
+    gap: 14px;
+    background: rgba(30,20,50,0.82);
+    border-radius: 22px;
+    padding: 14px 16px;
     text-decoration: none;
     color: inherit;
-    border: 1px solid #ffcc8866;
-    transition: 0.2s;
+    border: 1px solid #ffcc8855;
+    transition: 0.18s;
+    touch-action: manipulation;
+    min-height: 56px;
   }
-
   .project-link-card:active {
-    transform: scale(0.98);
-    background: rgba(80, 50, 120, 0.9);
+    transform: scale(0.97);
+    background: rgba(80,50,120,0.9);
   }
-
   .project-img {
-    width: 55px;
-    height: 55px;
-    border-radius: 20px;
+    width: 50px; height: 50px;
+    border-radius: 16px;
     background: #2a1e3a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
   }
-
   .project-info h3 {
     color: #ffdd99;
-    font-size: 1.1rem;
+    font-size: clamp(0.85rem, 3vw, 1.05rem);
+    margin-bottom: 3px;
   }
-
   .project-info p {
     color: #bbaaee;
-    font-size: 0.75rem;
+    font-size: clamp(0.68rem, 2.2vw, 0.76rem);
   }
 
-  /* PAGE 4 : FARLANDS */
+  /* ===== PAGE 4 : FARLANDS ===== */
   #page4 {
     background: linear-gradient(135deg, #02000a 0%, #1f0040 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page4-inner {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12% 5%;
+    padding: 12% 5% 10%;
+    min-height: 100dvh;
     position: relative;
+    z-index: 2;
+    width: 100%;
   }
 
   .farlands-title {
-    font-size: clamp(28px, 8vw, 55px);
+    font-size: clamp(26px, 7.5vw, 54px);
     color: #c99eff;
-    text-shadow: 0 0 22px #aa55ff;
+    text-shadow: 0 0 24px #aa55ff;
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
-
   .farlands-sub {
     color: #b07eff;
     text-align: center;
     margin-bottom: 40px;
-    font-size: 14px;
+    font-size: clamp(12px, 3vw, 15px);
   }
-
   .links-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 24px;
-    max-width: 700px;
+    gap: 20px;
+    max-width: 680px;
     margin: 0 auto;
   }
-
   .link-block {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
     text-decoration: none;
-    transition: 0.2s;
-    width: 80px;
+    transition: transform 0.18s;
+    width: 76px;
+    touch-action: manipulation;
   }
-
-  .link-block:active {
-    transform: translateY(-4px);
-  }
-
+  .link-block:active { transform: translateY(-4px); }
   .link-icon {
-    width: 60px;
-    height: 60px;
-    background: rgba(160, 80, 255, 0.25);
+    width: 62px; height: 62px;
+    background: rgba(160,80,255,0.22);
     border: 2px solid #aa66ffaa;
-    border-radius: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
+    border-radius: 26px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+    transition: box-shadow 0.18s;
   }
-
+  .link-block:active .link-icon { box-shadow: 0 0 18px #aa66ff88; }
   .link-label {
-    font-size: 11px;
+    font-size: 10px;
     color: #cc99ff;
+    text-align: center;
+    font-weight: bold;
   }
+  .page4-back-btn { margin-top: 40px; }
 
+  /* Stars */
   .stars-bg {
     position: absolute;
     inset: 0;
     pointer-events: none;
     overflow: hidden;
+    z-index: 0;
   }
-
   .star {
     position: absolute;
-    width: 2px;
-    height: 2px;
-    background: #fef;
+    width: 2px; height: 2px;
+    background: #eef;
     border-radius: 50%;
     animation: twink 2s infinite alternate;
   }
-
   @keyframes twink {
-    0% { opacity: 0.2; }
-    100% { opacity: 1; }
+    0% { opacity: 0.15; }
+    100% { opacity: 0.95; }
   }
 
-  @media (max-width: 650px) {
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
     .hero {
-      flex-direction: column;
-      text-align: center;
-      padding: 8% 5%;
+      flex-direction: column-reverse;
+      align-items: center;
+      padding: 12% 5% 4%;
+      gap: 18px;
     }
+    .about-box { text-align: center; }
     .family-section {
       flex-direction: column;
+      align-items: center;
       text-align: center;
     }
-    .bottom-bar-static {
-      justify-content: center;
-    }
-    .page-nav-buttons {
+    .family-photos { justify-content: center; }
+    .page-nav-buttons,
+    .page3-nav-buttons {
       flex-direction: column;
+      align-items: stretch;
     }
-    .nav-btn {
-      width: 100%;
-    }
+    .nav-btn { width: 100%; min-width: unset; }
     .project-link-card {
       flex-direction: column;
       text-align: center;
     }
-    .enter-label {
-      white-space: normal;
-      font-size: 10px;
-    }
+    .nether-grid { grid-template-columns: 1fr; }
+    .links-grid { gap: 14px; }
+    .link-block { width: 68px; }
+    .link-icon { width: 54px; height: 54px; font-size: 26px; }
+  }
+
+  @media (max-width: 380px) {
+    .hex-wrapper { width: 100px; height: 100px; }
+    .about-box h1 { font-size: 24px; }
+    #dayNightToggle { width: 50px; height: 50px; }
+    .enter-gif { width: 60px; }
+  }
+
+  /* Safe area for notched phones */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    #page1 { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
   }
 </style>
 </head>
-<body>
+<body class="page1-active">
 
-<video id="bgVideo" class="video-bg" autoplay muted playsinline loop preload="auto">
+<video id="bgVideo" autoplay muted playsinline loop preload="auto" webkit-playsinline x-webkit-airplay="deny">
   <source src="/Minecraft_timelapse.mp4" type="video/mp4">
 </video>
-<div class="overlay-bg" id="globalOverlay"></div>
+<div id="globalOverlay"></div>
 
-<!-- PAGE 1 -->
+<!-- ===== FIXED BUTTONS — PAGE 1 ONLY ===== -->
+<button id="dayNightToggle" aria-label="Toggle Day/Night">
+  <img src="/day.png"  alt="day"   id="dayIcon">
+  <img src="/night.png" alt="night" id="nightIcon" class="hidden">
+</button>
+
+<div id="enterPage2Btn" role="button" tabindex="0" aria-label="Enter Nether Realm">
+  <img src="/bg_edited_gif_233ce16a-bfb7-4709-b44e-e969c1ff7111_GIFSolo_20260403_005309.gif"
+       alt="enter portal" class="enter-gif">
+ </div>
+
+<!-- ============================================================ -->
+<!-- PAGE 1 : HOME -->
+<!-- ============================================================ -->
 <section class="page active" id="page1">
   <div class="hero">
-    <div class="about-box">
+    <div class="about-box" id="aboutBox">
       <h1>HASINJO</h1>
-      <p>⚡ Developer · Cybersecurity · Web Dev · Network Admin<br>Based in Madagascar 🇲🇬<br><br>❝ crafting secure & interactive realms ❞</p>
+      <p>
+        ⚡ Developer · Cybersecurity · Web Dev · Network Admin<br>
+        Based in Madagascar 🇲🇬<br><br>
+        ❝ crafting secure &amp; interactive realms ❞
+      </p>
     </div>
     <div class="profile-hex">
-      <div class="hex-wrapper"><div class="hex-inner" style="background-image:url('/profile.png')"></div></div>
+      <div class="hex-wrapper">
+        <div class="hex-inner" style="background-image:url('/IMG_20260317_222739_530.webp')"></div>
+      </div>
     </div>
   </div>
+
   <div class="family-section">
-    <img src="/family-sprite.png" alt="family sprite" class="family-sprite" id="familyToggleSprite">
+    <img src="/image_1775224190075_0cc4a1ed.png" alt="family sprite" class="family-sprite" id="familyToggleSprite">
     <div class="family-text">
       <h2>👪 My Happy Family</h2>
       <p>Tap the sprite to see my beloved family — my strongest support.</p>
       <div class="family-photos" id="familyPhotosList">
-        <img src="/family1.jpg" alt="family 1">
-        <img src="/family2.jpg" alt="family 2">
-        <img src="/family3.jpg" alt="family 3">
-      </div>
+        <img src="/1775213859179.jpg" alt="family 1">
+       </div>
     </div>
-  </div>
-  <div class="bottom-bar-static">
-    <button class="daynight-btn" id="dayNightToggle" aria-label="Day/Night">
-      <img src="/day.png" alt="day" id="dayIcon">
-      <img src="/night.png" alt="night" id="nightIcon" class="hidden">
-    </button>
-    <div class="gif-continue" id="enterPage2Btn">
-      <img src="/bg_edited_gif_233ce16a-bfb7-4709-b44e-e969c1ff7111_GIFSolo_20260403_005309.gif" alt="enter portal" class="enter-gif">
-      <span class="enter-label">🔥 CLICk NETHER REALM 🔥</span>
-    </div>
-    <div style="width: 44px;"></div>
   </div>
 </section>
 
-<!-- PAGE 2 -->
+<!-- ============================================================ -->
+<!-- PAGE 2 : NETHER REALM -->
+<!-- ============================================================ -->
 <section class="page" id="page2">
   <div class="page2-container">
     <h2 class="nether-title">🔥 NETHER REALM · JOURNEY</h2>
     <div class="nether-grid">
-      <div class="nether-card"><h3>🎓 Baccalauréat</h3><div class="year">2024 – 2025</div><p>Lycée Saint Michel Itaosy</p></div>
-      <div class="nether-card"><h3>🏛️ Licence 1</h3><div class="year">2024 – 2025</div><p>ESMIA (Management & IT)</p></div>
-      <div class="nether-card"><h3>🏛️ Licence 2</h3><div class="year">2025 – 2026</div><p>ESMIA - Réseaux & Securité</p></div>
-      <div class="nether-card"><h3>🔐 Cybersecurity</h3><div class="year">Compétences</div><div class="skills-grid"><span class="skill-tag">Network Security</span><span class="skill-tag">Ethical Hacking</span><span class="skill-tag">Firewall</span><span class="skill-tag">CTF</span><span class="skill-tag">Linux</span></div></div>
-      <div class="nether-card"><h3>🌐 Web Dev</h3><div class="year">Compétences</div><div class="skills-grid"><span class="skill-tag">HTML/CSS</span><span class="skill-tag">JavaScript</span><span class="skill-tag">Three.js</span><span class="skill-tag">React</span></div></div>
-      <div class="nether-card"><h3>🖧 Admin Réseaux</h3><div class="year">Compétences</div><div class="skills-grid"><span class="skill-tag">TCP/IP</span><span class="skill-tag">Cisco</span><span class="skill-tag">VPN</span><span class="skill-tag">DNS/DHCP</span></div></div>
-      <div class="nether-card"><h3>🌍 Langues</h3><div class="year">Languages</div><div class="skills-grid"><span class="skill-tag">Malagasy 🇲🇬</span><span class="skill-tag">Français 🇫🇷</span><span class="skill-tag">English 🇬🇧</span></div></div>
-      <div class="nether-card"><h3>⚡ Abilities</h3><div class="year">Soft skills</div><div class="skills-grid"><span class="skill-tag">Problem Solving</span><span class="skill-tag">Coding</span><span class="skill-tag">Creative</span><span class="skill-tag">Team Work</span></div></div>
+      <div class="nether-card">
+        <h3>🎓 Baccalauréat</h3>
+        <span class="year">2024 – 2025</span>
+        <p>Lycée Saint Michel Itaosy</p>
+      </div>
+      <div class="nether-card">
+        <h3>🏛️ Licence 1</h3>
+        <span class="year">2024 – 2025</span>
+        <p>ESMIA (Management &amp; IT)</p>
+      </div>
+      <div class="nether-card">
+        <h3>🏛️ Licence 2</h3>
+        <span class="year">2025 – 2026</span>
+        <p>ESMIA — Réseaux &amp; Sécurité</p>
+      </div>
+      <div class="nether-card">
+        <h3>🔐 Cybersecurity</h3>
+        <span class="year">Compétences</span>
+        <div class="skills-grid">
+          <span class="skill-tag">Network Security</span>
+          <span class="skill-tag">Ethical Hacking</span>
+          <span class="skill-tag">Firewall</span>
+          <span class="skill-tag">CTF</span>
+          <span class="skill-tag">Linux</span>
+        </div>
+      </div>
+      <div class="nether-card">
+        <h3>🌐 Web Dev</h3>
+        <span class="year">Compétences</span>
+        <div class="skills-grid">
+          <span class="skill-tag">HTML/CSS</span>
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">Three.js</span>
+          <span class="skill-tag">React</span>
+        </div>
+      </div>
+      <div class="nether-card">
+        <h3>🖧 Admin Réseaux</h3>
+        <span class="year">Compétences</span>
+        <div class="skills-grid">
+          <span class="skill-tag">TCP/IP</span>
+          <span class="skill-tag">Cisco</span>
+          <span class="skill-tag">VPN</span>
+          <span class="skill-tag">DNS/DHCP</span>
+        </div>
+      </div>
+      <div class="nether-card">
+        <h3>🌍 Langues</h3>
+        <span class="year">Languages</span>
+        <div class="skills-grid">
+          <span class="skill-tag">Malagasy 🇲🇬</span>
+          <span class="skill-tag">Français 🇫🇷</span>
+          <span class="skill-tag">English 🇬🇧</span>
+        </div>
+      </div>
+      <div class="nether-card">
+        <h3>⚡ Soft Skills</h3>
+        <span class="year">Abilities</span>
+        <div class="skills-grid">
+          <span class="skill-tag">Problem Solving</span>
+          <span class="skill-tag">Coding</span>
+          <span class="skill-tag">Creative</span>
+          <span class="skill-tag">Team Work</span>
+        </div>
+      </div>
     </div>
     <div class="page-nav-buttons">
       <button class="nav-btn" id="goToPage1From2">◀ BACK TO OVERWORLD</button>
@@ -662,263 +772,419 @@
   </div>
 </section>
 
-<!-- PAGE 3 -->
+<!-- ============================================================ -->
+<!-- PAGE 3 : TREASURE CHEST -->
+<!-- ============================================================ -->
 <section class="page" id="page3">
   <div class="chest-static-area">
     <h2 class="chest-title">🎁 TREASURE CHEST</h2>
-    <p class="chest-click-hint">⬇️ TAP THE CHEST → OPEN PROJECTS ⬇️</p>
-    <canvas id="static-chest-canvas" width="320" height="270" style="width:280px; max-width:80vw; height:auto"></canvas>
+    <p class="chest-click-hint">⬇️ TAP THE CHEST TO OPEN PROJECTS ⬇️</p>
+
+    <!-- CSS-only static chest — no Three.js rotation, fully tappable -->
+    <button id="chest-tap-btn" aria-label="Open projects">
+      <div class="chest-svg-wrap">
+        <svg viewBox="0 0 260 220" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+          <!-- Shadow -->
+          <ellipse cx="130" cy="210" rx="90" ry="10" fill="rgba(0,0,0,0.35)"/>
+          <!-- Chest base -->
+          <rect x="20" y="110" width="220" height="100" rx="8" fill="#8B5A2B"/>
+          <rect x="20" y="110" width="220" height="100" rx="8"
+                fill="none" stroke="#5a3010" stroke-width="3"/>
+          <!-- Base planks shading -->
+          <rect x="20" y="130" width="220" height="4" fill="#6b4420" opacity="0.5"/>
+          <rect x="20" y="150" width="220" height="4" fill="#6b4420" opacity="0.5"/>
+          <rect x="20" y="170" width="220" height="4" fill="#6b4420" opacity="0.5"/>
+          <rect x="20" y="190" width="220" height="4" fill="#6b4420" opacity="0.5"/>
+          <!-- Iron bands base -->
+          <rect x="15" y="108" width="14" height="104" rx="4" fill="#555" stroke="#333" stroke-width="1.5"/>
+          <rect x="231" y="108" width="14" height="104" rx="4" fill="#555" stroke="#333" stroke-width="1.5"/>
+          <rect x="15" y="154" width="230" height="12" rx="3" fill="#555" stroke="#333" stroke-width="1.5"/>
+          <!-- Chest lid -->
+          <rect x="20" y="40" width="220" height="78" rx="8" fill="#a06030"/>
+          <rect x="20" y="40" width="220" height="78" rx="8"
+                fill="none" stroke="#5a3010" stroke-width="3"/>
+          <!-- Lid planks -->
+          <rect x="20" y="60" width="220" height="4" fill="#7a4a22" opacity="0.5"/>
+          <rect x="20" y="80" width="220" height="4" fill="#7a4a22" opacity="0.5"/>
+          <rect x="20" y="100" width="220" height="4" fill="#7a4a22" opacity="0.5"/>
+          <!-- Iron bands lid -->
+          <rect x="15" y="38" width="14" height="82" rx="4" fill="#555" stroke="#333" stroke-width="1.5"/>
+          <rect x="231" y="38" width="14" height="82" rx="4" fill="#555" stroke="#333" stroke-width="1.5"/>
+          <rect x="15" y="70" width="230" height="12" rx="3" fill="#555" stroke="#333" stroke-width="1.5"/>
+          <!-- Latch base -->
+          <rect x="108" y="104" width="44" height="22" rx="5" fill="#cca000" stroke="#997700" stroke-width="2"/>
+          <!-- Latch keyhole -->
+          <circle cx="130" cy="112" r="5" fill="#664400"/>
+          <rect x="127" y="112" width="6" height="8" rx="2" fill="#664400"/>
+          <!-- Glitter sparks -->
+          <g opacity="0.85">
+            <line x1="60" y1="28" x2="60" y2="18" stroke="#ffdd57" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="55" y1="23" x2="65" y2="23" stroke="#ffdd57" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="57" y1="20" x2="63" y2="26" stroke="#ffdd57" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="63" y1="20" x2="57" y2="26" stroke="#ffdd57" stroke-width="1.5" stroke-linecap="round"/>
+          </g>
+          <g opacity="0.7">
+            <line x1="195" y1="22" x2="195" y2="14" stroke="#ffaa33" stroke-width="2" stroke-linecap="round"/>
+            <line x1="191" y1="18" x2="199" y2="18" stroke="#ffaa33" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <g opacity="0.6">
+            <line x1="230" y1="55" x2="230" y2="48" stroke="#ffdd88" stroke-width="2" stroke-linecap="round"/>
+            <line x1="226.5" y1="51.5" x2="233.5" y2="51.5" stroke="#ffdd88" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <!-- Glow overlay -->
+          <rect x="20" y="40" width="220" height="78" rx="8"
+                fill="url(#lidGlow)" opacity="0.18"/>
+          <defs>
+            <radialGradient id="lidGlow" cx="50%" cy="30%" r="60%">
+              <stop offset="0%" stop-color="#ffee88"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
+    </button>
   </div>
-  <div id="project-card-modal">
+
+ 
+
+  <!-- PROJECT MODAL -->
+  <div id="project-card-modal" role="dialog" aria-modal="true" aria-label="Projects">
     <div class="project-details-card">
-      <button class="modal-close" id="closeModalBtn">✕</button>
-      <h2 style="text-align:center; color:#ffdd88;">📁 MY PROJECTS LIBRARY</h2>
+      <button class="modal-close" id="closeModalBtn" aria-label="Close">✕</button>
+      <h2 style="text-align:center;color:#ffdd88;margin-top:4px;">📁 MY PROJECTS</h2>
       <div class="projects-list">
-        <a href="#" target="_blank" class="project-link-card"><div class="project-img">🌐</div><div class="project-info"><h3>3D IMMERSIVE PORTFOLIO</h3><p>Three.js + cinematic Minecraft style</p></div></a>
-        <a href="#" target="_blank" class="project-link-card"><div class="project-img">🔐</div><div class="project-info"><h3>CTF CHALLENGE LAB</h3><p>Cybersecurity capture the flag platform</p></div></a>
-        <a href="#" target="_blank" class="project-link-card"><div class="project-img">🖧</div><div class="project-info"><h3>NETWORK SIMULATION</h3><p>Cisco Packet Tracer – enterprise topology</p></div></a>
-        <a href="#" target="_blank" class="project-link-card"><div class="project-img">🎮</div><div class="project-info"><h3>MINECRAFT UTILITIES</h3><p>Custom plugins & datapacks</p></div></a>
-        <a href="#" target="_blank" class="project-link-card"><div class="project-img">⚡</div><div class="project-info"><h3>WEB SECURITY TOOL</h3><p>Vulnerability scanner demo</p></div></a>
+        <a href="#" target="_blank" rel="noopener" class="project-link-card">
+          <div class="project-img">🌐</div>
+          <div class="project-info">
+            <h3>3D IMMERSIVE PORTFOLIO</h3>
+            <p>Three.js + cinematic Minecraft style</p>
+          </div>
+        </a>
+        <a href="https://github.com/Petit128/firstProjectasDev.git" target="_blank" rel="noopener" class="project-link-card">
+          <div class="project-img">🔐</div>
+          <div class="project-info">
+            <h3>Transversal L1 Resto</h3>
+            <p>Project for the transversal module on restaurant management PHP</p>
+          </div>
+        </a>
+        <a href="https://github.com/Petit128/ThirtyFive/tree/main" target="_blank" rel="noopener" class="project-link-card">
+          <div class="project-img">🖧</div>
+          <div class="project-info">
+            <h3>THIRTY-FIVE</h3>
+            <p>Transversal project for the L2 module based on school</p>
+          </div>
+        </a>
+        <a href="https://github.com/Petit128/ZO_ANAY_ANAY_NY_CONGE.git" target="_blank" rel="noopener" class="project-link-card">
+          <div class="project-img">🎮</div>
+          <div class="project-info">
+            <h3>GESTION EMPLOYER</h3>
+            <p>Project for managing employee information setting - java</p>
+          </div>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PAGE 4 -->
+<!-- ============================================================ -->
+<!-- PAGE 4 : FARLANDS -->
+<!-- ============================================================ -->
 <section class="page" id="page4">
   <div class="stars-bg" id="starfield"></div>
-  <h2 class="farlands-title">✦ THE FARLANDS ✦</h2>
-  <p class="farlands-sub">Where the world ends — find me here</p>
-  <div class="links-grid">
-    <a href="https://github.com/" target="_blank" class="link-block"><div class="link-icon">🐙</div><span class="link-label">GITHUB</span></a>
-    <a href="https://linkedin.com/" target="_blank" class="link-block"><div class="link-icon">💼</div><span class="link-label">LINKEDIN</span></a>
-    <a href="mailto:hasinjo@email.com" class="link-block"><div class="link-icon">📧</div><span class="link-label">EMAIL</span></a>
-    <a href="https://twitter.com/" target="_blank" class="link-block"><div class="link-icon">🐦</div><span class="link-label">TWITTER</span></a>
-    <a href="#" class="link-block"><div class="link-icon">🎮</div><span class="link-label">DISCORD</span></a>
-    <a href="#" class="link-block"><div class="link-icon">📱</div><span class="link-label">WHATSAPP</span></a>
+  <div class="page4-inner">
+    <h2 class="farlands-title">✦ THE FARLANDS ✦</h2>
+    <p class="farlands-sub">Where the world ends — find me here</p>
+    <div class="links-grid">
+      <a href="https://github.com/Petit128/" target="_blank" rel="noopener" class="link-block">
+        <div class="link-icon">🐙</div><span class="link-label">GITHUB</span>
+      </a>
+      <a href="https://linkedin.com/" target="_blank" rel="noopener" class="link-block">
+        <div class="link-icon">💼</div><span class="link-label">LINKEDIN</span>
+      </a>
+      <a href="mailto:petithomme0128@email.com" class="link-block">
+        <div class="link-icon">📧</div><span class="link-label">EMAIL</span>
+      </a>
+      <a href="https://twitter.com/" target="_blank" rel="noopener" class="link-block">
+        <div class="link-icon">🐦</div><span class="link-label">TWITTER</span>
+      </a>
+      <a href="#" class="link-block">
+        <div class="link-icon">🎮</div><span class="link-label">DISCORD</span>
+      </a>
+      <a href="#" class="link-block">
+        <div class="link-icon">📱</div><span class="link-label">WHATSAPP</span>
+      </a>
+    </div>
+    <div class="page4-back-btn">
+      <button class="nav-btn" id="goToPage3From4"
+        style="border-color:#aa66ff;color:#cc99ff;">
+        ◀ BACK TO THE END
+      </button>
+    </div>
   </div>
 </section>
 
-<script type="importmap">
-  { "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/" } }
-</script>
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
+<script>
+/* ================================================================
+   UTILITIES
+================================================================ */
+const $ = id => document.getElementById(id);
 
-<script type="module">
-  import * as THREE from 'three';
-  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+/* ================================================================
+   PAGE MANAGER
+================================================================ */
+const pageIds = ['page1','page2','page3','page4'];
+const pageEls = {};
+pageIds.forEach(id => { pageEls[id] = $(id); });
 
-  // ----- PAGE SWITCHING (robust for mobile) -----
-  const pages = {
-    page1: document.getElementById('page1'),
-    page2: document.getElementById('page2'),
-    page3: document.getElementById('page3'),
-    page4: document.getElementById('page4')
-  };
-  
-  function showPage(pageId) {
-    Object.keys(pages).forEach(id => pages[id].classList.remove('active'));
-    pages[pageId].classList.add('active');
-    const video = document.getElementById('bgVideo');
-    const overlay = document.getElementById('globalOverlay');
-    if (pageId === 'page1') {
-      video.style.display = 'block';
-      overlay.style.display = 'block';
-      // ensure video continues
-      if (video.paused) video.play().catch(e=>{});
-    } else {
-      video.style.display = 'none';
-      overlay.style.display = 'none';
-    }
-    // scroll to top on page change for better UX
-    pages[pageId].scrollTop = 0;
+const bgVideo = $('bgVideo');
+const overlay = $('globalOverlay');
+
+function showPage(targetId) {
+  pageIds.forEach(id => pageEls[id].classList.remove('active'));
+  pageEls[targetId].classList.add('active');
+  pageEls[targetId].scrollTop = 0;
+
+  /* Toggle fixed buttons visibility via body class */
+  document.body.classList.toggle('page1-active', targetId === 'page1');
+
+  if (targetId === 'page1') {
+    bgVideo.style.display = 'block';
+    overlay.style.display = 'block';
+    bgVideo.play().catch(() => {});
+  } else {
+    bgVideo.style.display = 'none';
+    overlay.style.display = 'none';
   }
-  
-  // Button events (mobile friendly)
-  document.getElementById('enterPage2Btn').addEventListener('click', (e) => {
-    e.stopPropagation();
-    showPage('page2');
-  });
-  document.getElementById('goToPage1From2').addEventListener('click', () => showPage('page1'));
-  document.getElementById('goToPage3From2').addEventListener('click', () => showPage('page3'));
-  
-  // ----- 2-FINGER / TOUCHPAD + SWIPE FOR MOBILE (touch events) -----
-  let touchStartY = 0;
-  let touchEndY = 0;
-  let modalOpenFlag = false;
-  const modalElem = document.getElementById('project-card-modal');
-  const modalObserver = new MutationObserver(() => {
-    modalOpenFlag = modalElem.classList.contains('open');
-  });
-  modalObserver.observe(modalElem, { attributes: true, attributeFilter: ['class'] });
-  
-  // Wheel for trackpad/magic mouse (desktop + some laptops)
-  let lastWheel = 0;
-  let wheelBlock = false;
-  window.addEventListener('wheel', (e) => {
-    if (modalOpenFlag) return;
-    const active = document.querySelector('.page.active');
-    if (!active) return;
-    const delta = e.deltaY;
-    if (Math.abs(delta) < 12) return;
-    const now = Date.now();
-    if (wheelBlock || (now - lastWheel) < 350) return;
-    
-    if (active.id === 'page1' || active.id === 'page2') {
-      e.preventDefault();
-      return;
+}
+
+/* ================================================================
+   NAV BUTTONS
+================================================================ */
+$('enterPage2Btn').addEventListener('click', e => { e.stopPropagation(); showPage('page2'); });
+$('enterPage2Btn').addEventListener('touchend', e => {
+  e.preventDefault(); e.stopPropagation(); showPage('page2');
+}, { passive: false });
+$('enterPage2Btn').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showPage('page2'); }
+});
+
+$('goToPage1From2').addEventListener('click', () => showPage('page1'));
+$('goToPage3From2').addEventListener('click', () => showPage('page3'));
+$('goToPage3From4').addEventListener('click', () => showPage('page3'));
+
+/* ================================================================
+   DAY / NIGHT TOGGLE
+================================================================ */
+const dayIcon   = $('dayIcon');
+const nightIcon = $('nightIcon');
+const aboutBox  = $('aboutBox');
+let isAnimating = false;
+
+// AFTER
+let isNight = false; // ← DAY first
+
+bgVideo.addEventListener('loadedmetadata', () => {
+  bgVideo.currentTime = 9;  // ← day frame
+  bgVideo.pause();
+  overlay.style.background = 'rgba(255,255,255,0.08)'; // ← day overlay
+  aboutBox.classList.add('day-mode');    // ← day style
+  dayIcon.classList.remove('hidden');   // ← sun visible
+  nightIcon.classList.add('hidden');    // ← moon hidden
+}, { once: true });
+
+bgVideo.addEventListener('canplay', () => {
+  if (!isNight && !isAnimating) { bgVideo.pause(); bgVideo.currentTime = 9; }
+}, { once: true });
+
+function goToDay() {
+  if (isAnimating) return;
+  isAnimating = true;
+  bgVideo.currentTime = 2;
+  bgVideo.playbackRate = 3;
+  bgVideo.play().catch(() => {});
+  const iv = setInterval(() => {
+    if (bgVideo.currentTime >= 8.5) {
+      clearInterval(iv);
+      bgVideo.pause(); bgVideo.currentTime = 9; bgVideo.playbackRate = 1;
+      overlay.style.background = 'rgba(255,255,255,0.08)';
+      aboutBox.classList.add('day-mode');
+      dayIcon.classList.remove('hidden');
+      nightIcon.classList.add('hidden');
+      isNight = false; isAnimating = false;
     }
-    if (active.id === 'page3') {
-      e.preventDefault();
-      if (delta > 0) { // swipe down -> page4
-        wheelBlock = true;
-        lastWheel = now;
-        showPage('page4');
-        setTimeout(() => { wheelBlock = false; }, 400);
-      } else if (delta < 0) { // swipe up -> page2
-        wheelBlock = true;
-        lastWheel = now;
-        showPage('page2');
-        setTimeout(() => { wheelBlock = false; }, 400);
-      }
-      return;
+  }, 40);
+}
+
+function goToNight() {
+  if (isAnimating) return;
+  isAnimating = true;
+  bgVideo.currentTime = 8; bgVideo.pause();
+  const iv = setInterval(() => {
+    bgVideo.currentTime -= 0.1;
+    if (bgVideo.currentTime <= 2.2) {
+      clearInterval(iv);
+      bgVideo.pause(); bgVideo.currentTime = 1;
+      overlay.style.background = 'rgba(0,0,0,0.45)';
+      aboutBox.classList.remove('day-mode');
+      dayIcon.classList.add('hidden');
+      nightIcon.classList.remove('hidden');
+      isNight = true; isAnimating = false;
     }
-    if (active.id === 'page4') {
-      e.preventDefault();
-      if (delta < 0) { // swipe up -> back to page3
-        wheelBlock = true;
-        lastWheel = now;
-        showPage('page3');
-        setTimeout(() => { wheelBlock = false; }, 400);
-      }
-      return;
-    }
-  }, { passive: false });
-  
-  // TOUCH EVENTS for mobile (swipe up/down on page3/page4)
-  document.body.addEventListener('touchstart', (e) => {
-    if (modalOpenFlag) return;
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
-  
-  document.body.addEventListener('touchend', (e) => {
-    if (modalOpenFlag) return;
-    const active = document.querySelector('.page.active');
-    if (!active) return;
-    const diff = touchStartY - touchEndY;
-    const absDiff = Math.abs(diff);
-    if (absDiff < 35) return;
-    
-    if (active.id === 'page3') {
-      if (diff > 0) { // swipe up -> page4
-        showPage('page4');
-      } else if (diff < 0) { // swipe down -> page2
-        showPage('page2');
-      }
-      e.preventDefault();
-    } 
-    else if (active.id === 'page4') {
-      if (diff < 0) { // swipe down (finger up? diff negative means scroll down direction -> go back to page3)
-        showPage('page3');
-      }
-      e.preventDefault();
-    }
-  });
-  
-  document.body.addEventListener('touchmove', (e) => {
-    if (modalOpenFlag) return;
-    touchEndY = e.touches[0].clientY;
-    const active = document.querySelector('.page.active');
-    if (active && (active.id === 'page3' || active.id === 'page4')) {
-      // prevent page bounce while swiping on edges
-      const delta = touchStartY - touchEndY;
-      if (Math.abs(delta) > 20) e.preventDefault();
-    }
-  }, { passive: false });
-  
-  // ----- DAY/NIGHT MODE -----
-  const videoEl = document.getElementById('bgVideo');
-  const overlayDiv = document.getElementById('globalOverlay');
-  let isNight = false;
-  let animating = false;
-  const dayIcon = document.getElementById('dayIcon');
-  const nightIcon = document.getElementById('nightIcon');
-  
-  videoEl.addEventListener('loadedmetadata', () => { videoEl.currentTime = 9; videoEl.pause(); overlayDiv.style.background = 'rgba(255,255,255,0.08)'; });
-  function toDay() { if(animating) return; animating=true; videoEl.currentTime=2; videoEl.playbackRate=2.8; videoEl.play(); const iv=setInterval(()=>{ if(videoEl.currentTime>=8.5){ clearInterval(iv); videoEl.pause(); videoEl.currentTime=9; videoEl.playbackRate=1; overlayDiv.style.background='rgba(255,255,255,0.08)'; dayIcon.classList.remove('hidden'); nightIcon.classList.add('hidden'); isNight=false; animating=false; } },30);}
-  function toNight() { if(animating) return; animating=true; videoEl.currentTime=8; videoEl.pause(); const iv=setInterval(()=>{ videoEl.currentTime-=0.1; if(videoEl.currentTime<=2.2){ clearInterval(iv); videoEl.pause(); videoEl.currentTime=1; overlayDiv.style.background='rgba(0,0,0,0.65)'; dayIcon.classList.add('hidden'); nightIcon.classList.remove('hidden'); isNight=true; animating=false; } },28);}
-  document.getElementById('dayNightToggle').addEventListener('click', () => { if(!isNight) toNight(); else toDay(); });
-  
-  // Family toggle (mobile)
-  document.getElementById('familyToggleSprite').addEventListener('click', () => {
-    document.getElementById('familyPhotosList').classList.toggle('open');
-  });
-  
-  // ----- THREE.JS CHEST -----
-  const chestCanvas = document.getElementById('static-chest-canvas');
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-  camera.position.set(0, 0.9, 3.2);
-  camera.lookAt(0, 0.2, 0);
-  const renderer = new THREE.WebGLRenderer({ canvas: chestCanvas, antialias: true, alpha: true });
-  const setCanvasSize = () => {
-    const container = chestCanvas.parentElement;
-    let width = Math.min(window.innerWidth * 0.7, 320);
-    width = Math.max(240, width);
-    const aspect = 270/320;
-    chestCanvas.style.width = `${width}px`;
-    chestCanvas.style.height = `${width * aspect}px`;
-    renderer.setSize(width, width * aspect);
-    camera.aspect = width / (width * aspect);
-    camera.updateProjectionMatrix();
-  };
-  setCanvasSize();
-  window.addEventListener('resize', setCanvasSize);
-  renderer.setClearColor(0x000000, 0);
-  const ambient = new THREE.AmbientLight(0xffffff, 1.0);
-  scene.add(ambient);
-  const dLight = new THREE.DirectionalLight(0xffcc88, 1.5);
-  dLight.position.set(2, 3, 2);
-  scene.add(dLight);
-  const loader = new GLTFLoader();
-  loader.load('/models/chest.gltf', (gltf) => {
-    const chestGroup = gltf.scene;
-    scene.add(chestGroup);
-    chestGroup.scale.set(1.4,1.4,1.4);
-    chestGroup.position.set(0,-0.5,0);
-  }, undefined, (error) => console.warn("chest model not found, using fallback", error));
-  function animateChest() { requestAnimationFrame(animateChest); renderer.render(scene, camera); }
-  animateChest();
-  
-  // Modal open/close chest + prevent page swipe
-  const modalChest = document.getElementById('project-card-modal');
-  const closeModalBtn = document.getElementById('closeModalBtn');
-  chestCanvas.addEventListener('click', (e) => { e.stopPropagation(); modalChest.classList.add('open'); });
-  closeModalBtn.addEventListener('click', () => { modalChest.classList.remove('open'); });
-  modalChest.addEventListener('click', (e) => { if(e.target === modalChest) modalChest.classList.remove('open'); });
-  
-  // Ensure modal content scrolls without triggering page navigation
-  const modalContent = document.querySelector('.project-details-card');
-  if(modalContent) modalContent.addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
-  const projList = document.querySelector('.projects-list');
-  if(projList) projList.addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
-  
-  // Stars for farlands
-  const starContainer = document.getElementById('starfield');
-  for (let i=0;i<150;i++) {
-    const star = document.createElement('div');
-    star.classList.add('star');
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.animationDuration = 1 + Math.random() * 3 + 's';
-    star.style.animationDelay = Math.random() * 5 + 's';
-    star.style.opacity = 0.3 + Math.random() * 0.6;
-    starContainer.appendChild(star);
+  }, 30);
+}
+
+$('dayNightToggle').addEventListener('click', () => { if (!isNight) goToNight(); else goToDay(); });
+
+/* ================================================================
+   FAMILY SPRITE TOGGLE
+================================================================ */
+$('familyToggleSprite').addEventListener('click', () => {
+  $('familyPhotosList').classList.toggle('open');
+});
+
+/* ================================================================
+   SWIPE / SCROLL NAVIGATION
+   - Page 1 & 2: normal scroll within page
+   - Page 3 & 4: swipe between pages (buttons also work)
+================================================================ */
+let touchStartY = 0;
+let touchCurrY  = 0;
+let swipeBlocked = false;
+let modalOpen = false;
+
+/* Determine if a page can still scroll internally */
+function pageCanScroll(el, deltaY) {
+  if (!el) return false;
+  const atTop    = el.scrollTop <= 2;
+  const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+  if (deltaY > 0 && !atBottom) return true;  // scrolling down, not at bottom
+  if (deltaY < 0 && !atTop)    return true;  // scrolling up, not at top
+  return false;
+}
+
+/* Wheel — desktop */
+let lastWheelTime = 0;
+window.addEventListener('wheel', e => {
+  if (modalOpen) return;
+  const activeEl = document.querySelector('.page.active');
+  const activeId = activeEl?.id;
+  if (!activeId) return;
+
+  /* Pages 1 & 2: let them scroll naturally */
+  if (activeId === 'page1' || activeId === 'page2') return;
+
+  /* Page 3 & 4: intercept */
+  e.preventDefault();
+  const now = Date.now();
+  if (swipeBlocked || now - lastWheelTime < 450) return;
+  if (Math.abs(e.deltaY) < 20) return;
+
+  lastWheelTime = now;
+  swipeBlocked  = true;
+  setTimeout(() => { swipeBlocked = false; }, 460);
+
+  if (activeId === 'page3') {
+    if (e.deltaY > 0) showPage('page4');
+    else showPage('page2');
+  } else if (activeId === 'page4') {
+    if (e.deltaY < 0) showPage('page3');
   }
-  
-  // Autoplay video first tap
-  document.body.addEventListener('click', () => { if(videoEl.paused && pages.page1.classList.contains('active')) videoEl.play().catch(e=>{}); }, { once: true });
-  
-  console.log("Fully responsive + mobile navigation active: GIF works, chest touch works, 2-finger/touch swipe page3/4");
+}, { passive: false });
+
+/* Touch — all pages */
+document.body.addEventListener('touchstart', e => {
+  if (modalOpen) return;
+  touchStartY = e.touches[0].clientY;
+  touchCurrY  = touchStartY;
+}, { passive: true });
+
+document.body.addEventListener('touchmove', e => {
+  if (modalOpen) return;
+  touchCurrY = e.touches[0].clientY;
+  const activeEl = document.querySelector('.page.active');
+  const activeId = activeEl?.id;
+  const diff = touchStartY - touchCurrY;
+
+  /* Only prevent default (block native scroll) on pages 3 & 4 */
+  if ((activeId === 'page3' || activeId === 'page4') && Math.abs(diff) > 14) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
+document.body.addEventListener('touchend', e => {
+  if (modalOpen) return;
+  const diff = touchStartY - touchCurrY;
+  if (Math.abs(diff) < 45) return;  // minimum swipe distance
+
+  const activeId = document.querySelector('.page.active')?.id;
+
+  if (activeId === 'page1') {
+    /* Page 1: swipe up → go to page 2 only if already scrolled to bottom */
+    const el = pageEls['page1'];
+    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 10;
+    if (diff > 0 && atBottom) showPage('page2');
+  } else if (activeId === 'page2') {
+    const el = pageEls['page2'];
+    const atTop    = el.scrollTop <= 5;
+    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 10;
+    if (diff > 0 && atBottom) showPage('page3');
+    if (diff < 0 && atTop)    showPage('page1');
+  } else if (activeId === 'page3') {
+    if (diff > 0) showPage('page4');
+    else          showPage('page2');
+  } else if (activeId === 'page4') {
+    if (diff < 0) showPage('page3');
+  }
+}, { passive: true });
+
+/* ================================================================
+   PROJECT MODAL
+================================================================ */
+const modalEl  = $('project-card-modal');
+const chestBtn = $('chest-tap-btn');
+const closeBtn = $('closeModalBtn');
+
+function openModal()  { modalEl.classList.add('open');    modalOpen = true;  }
+function closeModal() { modalEl.classList.remove('open'); modalOpen = false; }
+
+/* Reliable tap on chest button */
+chestBtn.addEventListener('click',    e => { e.stopPropagation(); openModal(); });
+chestBtn.addEventListener('touchend', e => {
+  e.preventDefault(); e.stopPropagation(); openModal();
+}, { passive: false });
+chestBtn.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); }
+});
+
+closeBtn.addEventListener('click', closeModal);
+closeBtn.addEventListener('touchend', e => { e.preventDefault(); closeModal(); }, { passive: false });
+
+modalEl.addEventListener('click', e => { if (e.target === modalEl) closeModal(); });
+modalEl.addEventListener('touchmove', e => e.stopPropagation(), { passive: true });
+
+/* ================================================================
+   STARS — PAGE 4
+================================================================ */
+const starfield = $('starfield');
+for (let i = 0; i < 160; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.cssText = `
+    left:${Math.random()*100}%;
+    top:${Math.random()*100}%;
+    animation-duration:${1+Math.random()*3}s;
+    animation-delay:${Math.random()*5}s;
+    opacity:${0.25+Math.random()*0.7};
+    width:${Math.random()>0.85?3:2}px;
+    height:${Math.random()>0.85?3:2}px;
+  `;
+  starfield.appendChild(s);
+}
+
+console.log('✅ Hasinjo Portfolio v2 — mobile optimized, no Three.js rotation.');
 </script>
 </body>
 </html>
